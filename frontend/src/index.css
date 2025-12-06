@@ -6,7 +6,8 @@
 
 @layer base {
   body {
-    @apply bg-background text-gray-900 font-sans antialiased;
+    @apply text-gray-900 font-sans antialiased;
+    background-color: theme('colors.background');
   }
 }
 
