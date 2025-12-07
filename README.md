@@ -1,3 +1,10 @@
+# SaleSphere - Retail Sales Management System
+
+**Live Application**: [https://tru-estate-assignment.vercel.app/](https://tru-estate-assignment.vercel.app/)
+
+## Features
+
+### 🔽 Sorting
 - **Price** (High/Low)
 - **Quantity** (High/Low)
 - **Customer Name** (A-Z/Z-A)
