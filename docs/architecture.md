@@ -4,14 +4,16 @@
 ### Data Flow (Backend)
 1.  **Request**: `GET /api/transactions?q=john&region=Europe`
 2.  **Route**: Parsed by `routes/api.js`.
-3.  **Controller**:
-    -   `transactions` array (in-memory)
-    -   -> Filter by Search Query
-    -   -> Filter by Region/Category/etc.
-    -   -> Filter by Date/Age
-    -   -> Sort (e.g., by Date DESC)
-    -   -> Paginate (slice data)
-4.  **Response**: JSON object containing `data` chunk and metadata (`total`, `page`, `totalPages`).
+3.  **Controller**: Invokes `TransactionService`.
+4.  **Service**:
+    -   Constructs SQL Query dynamically based on parameters.
+    -   -> `WHERE ... LIKE ...` (Search)
+    -   -> `WHERE ... IN (...)` (Multi-select Filters)
+    -   -> `WHERE date >= ...` (Range Filters)
+    -   -> `ORDER BY ...` (Sorting)
+    -   -> `LIMIT ... OFFSET ...` (Pagination)
+    -   Executes query against SQLite database.
+5.  **Response**: JSON object containing `data` chunk and metadata (`total`, `page`, `totalPages`).
 
 ## Frontend Architecture
 The frontend is a Single Page Application (SPA) built with React and Vite.
@@ -36,7 +38,7 @@ We use the **React Context API** (`TransactionContext`) for a centralized state 
 5.  **State Update**: Context receives new data -> populates `transactions` -> Table Re-renders.
 
 ## Design Decisions
-1.  **In-Memory Data**: Chosen for simplicity and speed given the requirement for a mock dataset.
+1.  **SQLite Database**: Chosen for robust SQL querying capabilities (required for complex filtering/sorting) while remaining easy to set up (serverless/file-based) for the assignment.
 2.  **Debounced Search**: Prevents API spamming while typing.
 3.  **Context Over Redux**: Sufficient specific complexity for this scope without boilerplate.
 4.  **TailwindCSS**: Allows rapid UI iteration and consistent design tokens.

@@ -1,4 +1,4 @@
-const API_URL = 'https://truestate-assignment.onrender.com/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 export const fetchTransactions = async (params) => {
   const query = new URLSearchParams(params).toString();

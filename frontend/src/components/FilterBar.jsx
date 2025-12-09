@@ -1,12 +1,17 @@
 import React from 'react';
 import { useTransactions } from '../context/TransactionContext';
+import MultiSelect from './MultiSelect';
 
 const FilterBar = () => {
   const { filterOptions, params, updateParams } = useTransactions();
-  const { regions, categories, paymentMethods, genders, statuses, tags } = filterOptions;
+  const { regions, categories, paymentMethods, genders, statuses, tags, brands, deliveryTypes, customerTypes } = filterOptions;
 
   const handleChange = (e) => {
     updateParams({ [e.target.name]: e.target.value, page: 1 });
+  };
+
+  const handleMultiChange = (name, value) => {
+    updateParams({ [name]: value, page: 1 });
   };
 
   const handleReset = () => {
@@ -28,19 +33,55 @@ const FilterBar = () => {
       </button>
 
       {/* Customer Region */}
-      <select name="region" value={params.region} onChange={handleChange} className={selectClass}>
-        <option value="">Customer Region</option>
-        {regions.map(r => <option key={r} value={r}>{r}</option>)}
-      </select>
+      <MultiSelect 
+        label="Region" 
+        options={regions} 
+        selected={params.region} 
+        onChange={(val) => handleMultiChange('region', val)} 
+      />
 
       {/* Gender */}
-      <select name="gender" value={params.gender} onChange={handleChange} className={selectClass}>
-        <option value="">Gender</option>
-        {genders.map(g => <option key={g} value={g}>{g}</option>)}
-      </select>
+      <MultiSelect 
+        label="Gender" 
+        options={genders} 
+        selected={params.gender} 
+        onChange={(val) => handleMultiChange('gender', val)} 
+      />
 
-      {/* Age Range (Mocking range as select for UI match, or keeping min/max inputs hidden/popover? Image shows dropdown "Age Range". I'll make a simple dropdown for predefined ranges or just keep it simple) */}
-      <select name="minAge" value={params.minAge} onChange={(e) => updateParams({ minAge: e.target.value, maxAge: parseInt(e.target.value) + 10 })} className={selectClass}>
+      {/* Product Category */}
+      <MultiSelect 
+        label="Category" 
+        options={categories} 
+        selected={params.category} 
+        onChange={(val) => handleMultiChange('category', val)} 
+      />
+
+      {/* Tags */}
+      <MultiSelect 
+        label="Tags" 
+        options={tags} 
+        selected={params.tags} 
+        onChange={(val) => handleMultiChange('tags', val)} 
+      />
+
+      {/* Payment Method */}
+      <MultiSelect 
+        label="Payment" 
+        options={paymentMethods} 
+        selected={params.paymentMethod} 
+        onChange={(val) => handleMultiChange('paymentMethod', val)} 
+      />
+
+      {/* Status */}
+      <MultiSelect 
+        label="Status" 
+        options={statuses} 
+        selected={params.status} 
+        onChange={(val) => handleMultiChange('status', val)} 
+      />
+
+      {/* Age Range */}
+      <select name="minAge" value={params.minAge} onChange={(e) => updateParams({ minAge: e.target.value, maxAge: e.target.value ? parseInt(e.target.value) + 10 : '' })} className={selectClass}>
          <option value="">Age Range</option>
          <option value="18">18-28</option>
          <option value="29">29-39</option>
@@ -48,27 +89,9 @@ const FilterBar = () => {
          <option value="50">50+</option>
       </select>
 
-      {/* Product Category */}
-      <select name="category" value={params.category} onChange={handleChange} className={selectClass}>
-        <option value="">Product Category</option>
-        {categories.map(c => <option key={c} value={c}>{c}</option>)}
-      </select>
-
-      {/* Tags */}
-      <select name="tags" value={params.tags} onChange={handleChange} className={selectClass}>
-        <option value="">Tags</option>
-        {tags?.map(t => <option key={t} value={t}>{t}</option>)}
-      </select>
-
-      {/* Payment Method */}
-      <select name="paymentMethod" value={params.paymentMethod} onChange={handleChange} className={selectClass}>
-        <option value="">Payment Method</option>
-        {paymentMethods.map(p => <option key={p} value={p}>{p}</option>)}
-      </select>
-
       {/* Date */}
-      <input type="date" name="startDate" value={params.startDate} onChange={handleChange} className={`${selectClass} w-auto`} placeholder="Date" />
-
+      <input type="date" name="startDate" value={params.startDate} onChange={handleChange} className={`${selectClass} w-auto`} placeholder="Start Date" />
+      
       {/* Spacer */}
       <div className="flex-grow"></div>
 
